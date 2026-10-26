@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Легенда острова</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400&family=Ruslan+Display&display=swap">
+<style>
+:root{
+  --bg:#eef3ef; --surface:#ffffff; --text:#14262c; --muted:#4d646b;
+  --sea:#1f6f78; --sun:#a8700a; --coral:#c24a44; --vio:#8a5a9c; --line:#c9d8d4;
+  --hero-a:#0f2a33; --hero-b:#1f6f78; --hero-text:#f3efe2;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1d22; --surface:#12292f; --text:#e9efe9; --muted:#9db5b8;
+    --sea:#59b3bb; --sun:#f2b84b; --coral:#ef7f77; --vio:#c79ad8; --line:#25444b;
+    --hero-a:#07151a; --hero-b:#14515a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1d22; --surface:#12292f; --text:#e9efe9; --muted:#9db5b8;
+  --sea:#59b3bb; --sun:#f2b84b; --coral:#ef7f77; --vio:#c79ad8; --line:#25444b;
+  --hero-a:#07151a; --hero-b:#14515a;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Alegreya",Georgia,"Times New Roman",serif;font-size:1.25rem;line-height:1.7}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.hero{background:linear-gradient(170deg,var(--hero-a),var(--hero-b));color:var(--hero-text);padding:3rem 1.5rem 0;text-align:center;overflow:hidden}
+.lang{display:inline-flex;gap:.3rem;margin-bottom:1.5rem;background:rgba(255,255,255,.12);padding:.25rem;border-radius:999px}
+.lang button{font:inherit;font-size:1rem;border:0;background:transparent;color:var(--hero-text);padding:.3rem 1rem;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#f2b84b;color:#1b1500}
+.hero p.sub{margin:0 0 .5rem;font-style:italic;opacity:.8}
+.hero h1{font-family:"Ruslan Display","Alegreya",Georgia,serif;font-weight:400;font-size:clamp(2.8rem,10vw,6rem);line-height:1.05;margin:0 auto;max-width:12ch}
+.hero .lead{max-width:34rem;margin:1.2rem auto 0;font-size:1.2rem;opacity:.9}
+.hero .btn{display:inline-block;margin-top:1.6rem;padding:.7rem 1.5rem;border-radius:999px;background:#f2b84b;color:#1b1500;text-decoration:none;font-weight:500}
+.hero svg{display:block;width:100%;height:90px;margin-top:2rem}
+main{max-width:42rem;margin:0 auto;padding:3rem 1.5rem 2rem}
+article{margin-bottom:3.5rem}
+.chapter-head{border-left:4px solid var(--sun);padding-left:1rem;margin-bottom:2rem}
+.chapter-head small{color:var(--muted);font-size:1rem}
+.chapter-head h2{margin:.1rem 0 0;font-family:"Ruslan Display","Alegreya",Georgia,serif;font-weight:400;font-size:2.2rem;line-height:1.2}
+.story p{margin:0 0 1.2rem}
+.story .first::first-letter{font-family:"Ruslan Display","Alegreya",serif;float:left;font-size:4rem;line-height:.85;padding:.35rem .6rem 0 0;color:var(--sea)}
+.story .line{margin:0 0 .9rem;padding-left:1rem;border-left:3px solid var(--c,var(--line))}
+.line b{color:var(--c,var(--text));font-weight:500}
+.sp-n{--c:var(--coral)} .sp-i{--c:var(--sun)} .sp-a{--c:var(--sea)} .sp-l{--c:var(--vio)} .sp-g{--c:var(--muted)} .sp-y{--c:#d08a3c}
+h3{font-size:1.5rem;margin:3rem 0 1rem}
+.cast{list-style:none;padding:0;margin:0;display:grid;gap:.9rem}
+.cast li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1rem 1.2rem;display:grid;grid-template-columns:3.2rem 1fr;gap:.2rem 1rem;align-items:center}
+.cast .mark{grid-row:span 2;width:3.2rem;height:3.2rem;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;font-weight:500;color:#fff}
+.cast b{font-size:1.3rem}
+.cast span{color:var(--muted);line-height:1.4}
+.m-n{background:#c24a44}.m-i{background:#7a6a2a}.m-a{background:#1f6f78}.m-l{background:#8a5a9c}.m-g{background:#5d6d72}.m-y{background:#a0612a}
+.next{margin-top:3rem;border:2px dashed var(--line);border-radius:14px;padding:1.4rem;text-align:center;color:var(--muted)}
+.next h3{margin:0 0 .4rem;color:var(--text)}
+footer{text-align:center;color:var(--muted);padding:2rem 1.5rem 3rem;font-size:1rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.stage{max-width:34rem;margin:0 auto;padding:2rem 1rem 3rem;scroll-margin-top:1rem}
+.book{perspective:1400px}
+.cover{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;width:100%;aspect-ratio:3/4;max-height:34rem;border:0;border-radius:6px 16px 16px 6px;cursor:pointer;color:#f2d98b;font:inherit;text-align:center;padding:2rem;background:linear-gradient(135deg,#14515a,#0c2a31);box-shadow:inset 10px 0 0 rgba(0,0,0,.35),inset 0 0 0 10px #0c2a31,inset 0 0 0 12px #c9a24a,0 18px 40px rgba(0,0,0,.35);transform-origin:left center;transition:transform .7s ease,opacity .7s ease}
+.cover[hidden],.sheet[hidden]{display:none}
+.cover.opening{transform:rotateY(-110deg);opacity:.2}
+.cv-t{font-family:"Ruslan Display","Alegreya",Georgia,serif;font-size:clamp(2.2rem,9vw,3.2rem);line-height:1.1}
+.cv-i{font-size:3.5rem;transition:transform .3s}
+.cover:hover .cv-i{transform:scale(1.12)}
+.cv-s{font-size:1rem;opacity:.85;font-style:italic}
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:6px 16px 16px 6px;padding:2rem 1.6rem 1.6rem 2.2rem;min-height:26rem;font-size:1.15rem;box-shadow:inset 8px 0 14px -8px rgba(0,0,0,.25),0 14px 30px rgba(0,0,0,.18);transition:opacity .25s,transform .25s;outline:none}
+.paper.turn{opacity:0;transform:translateX(14px) rotateY(-8deg)}
+.paper .chapter-head h2{font-size:1.8rem}
+.paper h3{margin-top:0}
+.ctrl{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:1rem}
+.ctrl span{color:var(--muted);font-size:1rem}
+.ctrl button,.closeb{font:inherit;font-size:1rem;padding:.55rem 1.1rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}
+.ctrl button:disabled{opacity:.4;cursor:default}
+.closeb{display:block;margin:1rem auto 0;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.cover,.paper{transition:none}}
+
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"],:root[data-theme="light"]{
+ color-scheme:dark;--bg:#0a100c;--surface:#121b15;--text:#e9e3d6;--muted:#a3b0a4;--sea:#7fbf8a;--sun:#e9e2b8;--coral:#ef6a5e;--vio:#c79ad8;--line:#263629;--hero-a:#1b0508;--hero-b:#a3231f;--hero-text:#f8eedb}
+.hero{background:
+ radial-gradient(1.5px 1.5px at 8% 12%,rgba(255,255,255,.85),transparent),
+ radial-gradient(1.5px 1.5px at 22% 30%,rgba(255,255,255,.6),transparent),
+ radial-gradient(2px 2px at 35% 8%,rgba(255,255,255,.8),transparent),
+ radial-gradient(1.5px 1.5px at 62% 20%,rgba(255,255,255,.7),transparent),
+ radial-gradient(1.5px 1.5px at 78% 9%,rgba(255,255,255,.85),transparent),
+ radial-gradient(2px 2px at 90% 28%,rgba(255,255,255,.6),transparent),
+ radial-gradient(1.5px 1.5px at 14% 52%,rgba(255,255,255,.5),transparent),
+ radial-gradient(1.5px 1.5px at 94% 55%,rgba(255,255,255,.5),transparent),
+ linear-gradient(180deg,#14040a 0%,#5a0d17 35%,#a8281f 70%,#d9532e 100%)}
+.hero>*{position:relative;z-index:1}
+.hero h1{text-shadow:0 2px 26px rgba(0,0,0,.6)}
+.hero svg{height:clamp(300px,52vw,460px);margin-top:1rem}
+.lang button[aria-pressed="true"],.hero .btn{background:#e9e2b8;color:#1a0a0a}
+.moon{display:block;width:clamp(4.5rem,18vw,6.5rem);aspect-ratio:1;margin:0 auto 1.2rem;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fffdf0,#efe8c3 55%,#c9c196);box-shadow:0 0 40px 12px rgba(255,236,190,.45),0 0 110px 40px rgba(255,120,80,.25)}
+.moon::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 62% 38%,rgba(120,110,80,.35) 0 9%,transparent 10%),radial-gradient(circle at 38% 66%,rgba(120,110,80,.3) 0 13%,transparent 14%),radial-gradient(circle at 70% 70%,rgba(120,110,80,.25) 0 6%,transparent 7%)}
+.chapter-head{border-left-color:var(--coral)}
+.story .first::first-letter{color:var(--coral)}
+.m-a{background:#3f7a4d}
+.cover{color:#efe8c3;background:linear-gradient(180deg,#6b1218 0%,#2c0a0e 50%,#0a120d 100%);box-shadow:inset 10px 0 0 rgba(0,0,0,.45),inset 0 0 0 10px #12090b,inset 0 0 0 12px #c9c4a0,0 18px 40px rgba(0,0,0,.6)}
+.paper{background:linear-gradient(180deg,#16211a,#101812);border-color:#2c3d30}
+.paper{position:relative}
+.bm{position:absolute;top:-6px;right:1.4rem;width:2.1rem;height:4.4rem;border:0;padding:0;cursor:pointer;background:linear-gradient(180deg,#a3231f,#ef6a5e);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);box-shadow:0 4px 10px rgba(0,0,0,.4);transition:height .2s}
+.bm:hover,.bm:focus-visible{height:5rem}
+.egg{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;padding:1.5rem;text-align:center;background:radial-gradient(circle at 50% 40%,#1c2620,#050806 70%);color:#e9e3d6}
+.egg[hidden]{display:none}
+.egg svg{width:min(15rem,60vw);height:auto}
+.egg p{margin:0;font-family:"Ruslan Display","Alegreya",Georgia,serif;font-size:clamp(1.6rem,6vw,2.4rem);line-height:1.2;max-width:18ch}
+.egg button{font:inherit;font-size:1.1rem;padding:.7rem 1.6rem;border-radius:999px;border:0;background:#e9e2b8;color:#1a0a0a;cursor:pointer}
+.egg .tip{animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.35}}
+.egg.flash::after{content:"";position:absolute;inset:0;background:#fff;pointer-events:none;animation:flash 1.4s ease-out forwards}
+@keyframes flash{0%,25%{opacity:1}100%{opacity:0}}
+
+.onl{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:40;display:inline-flex;align-items:center;gap:.5rem;font:inherit;font-size:1rem;padding:.5rem 1rem;border-radius:999px;border:1px solid #2c3d30;background:rgba(18,27,21,.92);color:#e9e3d6;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.onl i{width:.65rem;height:.65rem;border-radius:50%;background:#4cd964;box-shadow:0 0 0 0 rgba(76,217,100,.6);animation:pulse 2s infinite}
+.onl.off i{background:#a3b0a4;animation:none}
+.onl.busy{opacity:.7}
+@keyframes pulse{70%{box-shadow:0 0 0 .5rem rgba(76,217,100,0)}100%{box-shadow:0 0 0 0 rgba(76,217,100,0)}}
+@media (prefers-reduced-motion:reduce){.onl i{animation:none}}
+@media (prefers-reduced-motion:reduce){.egg .tip{animation:none}.egg.flash::after{animation-duration:.01s}}
+.acts{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin-top:1.6rem}
+.acts .btn{margin-top:0}
+.hero .btn2{font:inherit;font-weight:500;border:2px solid #e9e2b8;background:transparent;color:#f8eedb;cursor:pointer;padding:.6rem 1.4rem}
+.bio{position:fixed;inset:0;z-index:60;background:rgba(5,8,6,.9);display:flex;justify-content:center;overflow-y:auto;padding:1.2rem 1rem calc(1.2rem + env(safe-area-inset-bottom,0px))}
+.bio[hidden]{display:none}
+.bio-in{width:min(100%,38rem);height:fit-content;margin:auto 0;background:linear-gradient(180deg,#16211a,#101812);border:1px solid #2c3d30;border-radius:16px;padding:1.6rem 1.4rem;color:#e9e3d6}
+.bio-in h2{font-family:"Ruslan Display","Alegreya",Georgia,serif;font-weight:400;font-size:2rem;line-height:1.2;margin:0 0 1rem}
+.bio-c{border-top:1px solid #263629;padding:1rem 0}
+.bio-c:first-of-type{border-top:0}
+.bio-h{display:flex;align-items:center;gap:.8rem}
+.bio-h b{font-size:1.35rem}
+.bio-t{color:#a3b0a4;font-size:1rem;line-height:1.3}
+.bio .mark{flex:none;width:2.8rem;height:2.8rem;border-radius:50%;display:grid;place-items:center;font-size:1.4rem;font-weight:500;color:#fff}
+.bio dl{margin:.7rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;font-size:1.1rem}
+.bio dt{color:#a3b0a4}
+.bio dd{margin:0}
+.bio-x{display:block;margin:1.2rem auto 0;font:inherit;font-size:1.05rem;padding:.6rem 1.6rem;border-radius:999px;border:0;background:#e9e2b8;color:#1a0a0a;cursor:pointer}
+.story .chapter-head:not(:first-child){margin-top:2.2rem}
+.petal{position:absolute;left:1rem;bottom:.9rem;width:2.3rem;height:2.3rem;border:0;padding:0;cursor:pointer;background:radial-gradient(circle at 30% 30%,#ffc2d1,#f08aa8 60%,#d65a82);border-radius:0 100% 0 100%;transform:rotate(-18deg);box-shadow:0 2px 8px rgba(0,0,0,.4);animation:petalw 3s ease-in-out infinite}
+.petal:focus-visible{outline:3px solid #e9e2b8;outline-offset:3px}
+@keyframes petalw{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(-8deg) translateY(-2px)}}
+.dz-space{height:5rem}
+.daisy{position:absolute;right:.8rem;bottom:.6rem;width:5.2rem;height:6.2rem;opacity:0;transform:translateY(45%) scale(.75);transform-origin:bottom center;pointer-events:none;transition:opacity .35s,transform .45s}
+.daisy.in{opacity:1;transform:none}
+.daisy.hop{animation:dzhop .6s ease}
+.daisy svg{display:block;width:100%;height:100%}
+.daisy .say{position:absolute;right:72%;bottom:92%;white-space:normal;width:max-content;max-width:11rem;text-align:center;background:#e9e2b8;color:#1a0a0a;padding:.3rem .8rem;border-radius:12px;font-size:.95rem;line-height:1.35;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+@keyframes dzhop{0%,100%{transform:none}35%{transform:translateY(-22%) rotate(-5deg)}70%{transform:translateY(0) rotate(4deg)}}
+@media (prefers-reduced-motion:reduce){.petal,.daisy{animation:none;transition:none}}
+.egg.aim{cursor:pointer}
+.egg .redblink{color:#ff2a2a;text-shadow:0 0 16px rgba(255,0,0,.55);animation:redblink .8s steps(1,end) infinite}
+@keyframes redblink{0%{color:#ff2a2a;opacity:1}50%{color:#5a0a0a;opacity:.5}}
+.egg.shot svg{animation:eshake .4s ease-out}
+@keyframes eshake{0%,100%{transform:none}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,2px)}80%{transform:translate(2px,-1px)}}
+.egg .mf{animation:muz 1s ease-out forwards;transform-origin:100px 165px}
+@keyframes muz{0%{opacity:1;transform:scale(1.15)}35%{opacity:1;transform:scale(1)}100%{opacity:.12;transform:scale(.8)}}
+@media (prefers-reduced-motion:reduce){.egg .redblink,.egg.shot svg,.egg .mf{animation:none}}
+.moonw{position:relative;width:clamp(4.5rem,18vw,6.5rem);margin:0 auto 1.2rem}
+.moonw .moon{margin:0;width:100%}
+.hero .vd{position:absolute;left:calc(50% - 127px);top:calc(50% + 14px);width:36px;height:36px;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;cursor:pointer;z-index:2}
+.vd::before{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px rgba(255,255,255,.8);animation:vdt 2.6s ease-in-out infinite}
+@keyframes vdt{50%{opacity:.45}}
+.hero .vd2{position:absolute;left:calc(50% + 127px);top:calc(50% - 22px);width:36px;height:36px;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;cursor:pointer;z-index:2}
+.vd2::before{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#ffe9a8;box-shadow:0 0 6px 2px rgba(255,233,168,.8);animation:vdt 3.1s ease-in-out infinite}
+.hero .vd2-t{position:absolute;left:calc(50% + 127px);top:calc(50% - 22px);transform:translate(-75%,14px);white-space:nowrap;color:#fff;font-style:italic;font-size:1.05rem;text-shadow:0 1px 8px rgba(0,0,0,.75);opacity:0;pointer-events:none;transition:opacity .4s;z-index:2}
+.hero .vd2-t.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.vd2::before{animation:none}.hero .vd2-t{transition:none}}
+.hero .vd-t{position:absolute;left:calc(50% - 127px);top:calc(50% + 14px);transform:translate(-26px,14px);white-space:nowrap;color:#fff;font-style:italic;font-size:1.05rem;text-shadow:0 1px 8px rgba(0,0,0,.75);opacity:0;pointer-events:none;transition:opacity .4s;z-index:2}
+.hero .vd-t.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.vd::before{animation:none}.hero .vd-t{transition:none}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="lang" role="group" aria-label="Язык / Мова / Language"><button type="button" data-lang="ru" aria-pressed="true">Русский</button><button type="button" data-lang="uk" aria-pressed="false">Українська</button><button type="button" data-lang="en" aria-pressed="false">English</button></div>
+  <div class="moonw"><div class="moon" aria-hidden="true"></div><button type="button" class="vd" id="vd" aria-expanded="false"></button><span class="vd-t" id="vdt" aria-hidden="true"></span><button type="button" class="vd2" id="vd2" aria-expanded="false"></button><span class="vd2-t" id="vd2t" aria-hidden="true"></span></div>
+  <p class="sub" data-k="sub">Книга, которую пишем вместе с друзьями</p>
+  <h1 data-k="title">Легенда острова</h1>
+  <p class="lead" data-k="lead">Они приехали в село не так давно. Никто ещё не знал, чем всё это закончится.</p>
+  <div class="acts"><a class="btn" href="#stage" data-k="start">Начать читать</a><button type="button" class="btn btn2" id="bioBtn">Биография персонажей</button><button type="button" class="btn btn2" id="monBtn">Биография монстров</button></div>
+  <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path d="M-7 164L3 264L-18 264ZM-7 217L9 318L-24 318ZM-7 270L14 371L-29 371ZM-7 324L20 424L-35 424ZM-7 377L26 478L-40 478ZM-10 430h6v32h-6ZM30 164L41 265L19 265ZM30 217L47 318L13 318ZM30 270L53 371L7 371ZM30 324L59 424L1 424ZM30 377L64 478L-5 478ZM27 430h6v32h-6ZM41 199L52 288L30 288ZM41 246L58 335L24 335ZM41 293L64 382L18 382ZM41 340L70 429L12 429ZM41 387L76 476L6 476ZM38 434h6v28h-6ZM85 143L93 251L77 251ZM85 200L97 308L72 308ZM85 257L101 365L68 365ZM85 314L105 422L64 422ZM85 371L110 479L60 479ZM82 428h6v34h-6ZM111 228L121 307L102 307ZM111 270L126 349L97 349ZM111 311L131 390L91 390ZM111 353L136 432L86 432ZM111 395L141 474L81 474ZM108 437h6v25h-6ZM144 258L153 327L136 327ZM144 295L157 363L131 363ZM144 331L161 399L127 399ZM144 367L166 436L122 436ZM144 404L170 472L118 472ZM141 440h6v22h-6ZM168 141L179 249L158 249ZM168 198L184 307L152 307ZM168 256L190 364L147 364ZM168 313L195 422L141 422ZM168 371L201 479L136 479ZM165 428h6v34h-6ZM196 156L204 260L188 260ZM196 211L209 314L184 314ZM196 266L213 369L180 369ZM196 320L217 424L175 424ZM196 375L221 478L171 478ZM193 430h6v32h-6ZM237 244L244 317L229 317ZM237 282L248 356L225 356ZM237 321L252 395L221 395ZM237 360L256 434L217 434ZM237 399L260 473L213 473ZM234 438h6v24h-6ZM272 233L281 310L264 310ZM272 274L285 351L260 351ZM272 315L290 392L255 392ZM272 355L294 433L251 433ZM272 396L299 474L246 474ZM269 437h6v25h-6ZM305 147L314 253L297 253ZM305 203L319 310L292 310ZM305 259L323 366L287 366ZM305 316L328 422L283 422ZM305 372L332 479L278 479ZM302 429h6v33h-6ZM335 190L346 282L325 282ZM335 239L351 330L320 330ZM335 287L356 379L314 379ZM335 336L362 428L309 428ZM335 384L367 476L304 476ZM332 433h6v29h-6ZM350 138L360 247L339 247ZM350 196L365 305L334 305ZM350 254L371 363L329 363ZM350 312L376 421L323 421ZM350 370L381 479L318 479ZM347 428h6v34h-6ZM396 144L405 251L388 251ZM396 201L410 308L383 308ZM396 258L414 365L379 365ZM396 315L419 422L374 422ZM396 371L424 479L369 479ZM393 428h6v34h-6ZM414 238L422 314L406 314ZM414 278L426 354L402 354ZM414 318L431 394L397 394ZM414 358L435 433L393 433ZM414 398L439 473L389 473ZM411 438h6v24h-6ZM438 221L448 302L428 302ZM438 264L453 345L423 345ZM438 307L459 388L418 388ZM438 350L464 431L413 431ZM438 393L469 474L407 474ZM435 436h6v26h-6ZM467 172L476 270L459 270ZM467 224L481 322L454 322ZM467 276L486 374L449 374ZM467 327L490 425L444 425ZM467 379L495 477L440 477ZM464 431h6v31h-6ZM504 154L514 258L495 258ZM504 209L519 313L490 313ZM504 264L524 368L485 368ZM504 319L529 423L480 423ZM504 374L534 478L475 478ZM501 429h6v33h-6ZM535 197L545 287L525 287ZM535 245L551 334L519 334ZM535 292L556 381L514 381ZM535 339L562 428L509 428ZM535 386L567 476L503 476ZM532 434h6v28h-6ZM560 133L568 244L552 244ZM560 192L572 303L548 303ZM560 251L576 362L544 362ZM560 310L580 421L540 421ZM560 369L584 480L536 480ZM557 427h6v35h-6ZM605 150L613 256L598 256ZM605 206L617 311L594 311ZM605 262L621 367L590 367ZM605 317L625 423L586 423ZM605 373L629 479L582 479ZM602 429h6v33h-6ZM637 212L646 297L627 297ZM637 257L652 341L622 341ZM637 302L657 386L617 386ZM637 346L662 430L611 430ZM637 391L667 475L606 475ZM634 435h6v27h-6ZM651 254L659 324L642 324ZM651 291L663 361L638 361ZM651 328L668 398L634 398ZM651 365L672 435L629 435ZM651 402L676 472L625 472ZM648 439h6v23h-6ZM701 234L712 311L691 311ZM701 275L717 352L685 352ZM701 316L723 392L680 392ZM701 356L728 433L674 433ZM701 397L734 474L669 474ZM698 437h6v25h-6ZM731 138L740 247L722 247ZM731 196L745 305L718 305ZM731 254L749 363L713 363ZM731 312L754 421L708 421ZM731 370L759 479L704 479ZM728 428h6v34h-6ZM749 192L760 283L739 283ZM749 240L765 331L733 331ZM749 288L771 380L728 380ZM749 337L777 428L722 428ZM749 385L782 476L717 476ZM746 433h6v29h-6ZM775 163L785 264L764 264ZM775 216L791 317L758 317ZM775 270L796 371L753 371ZM775 323L802 424L747 424ZM775 377L808 478L742 478ZM772 430h6v32h-6ZM821 255L832 325L810 325ZM821 292L838 362L804 362ZM821 329L844 399L798 399ZM821 366L850 435L792 435ZM821 403L856 472L786 472ZM818 440h6v22h-6ZM835 216L845 299L825 299ZM835 260L850 343L820 343ZM835 304L856 387L815 387ZM835 348L861 431L810 431ZM835 392L866 475L804 475ZM832 436h6v26h-6ZM883 216L895 299L872 299ZM883 260L900 343L866 343ZM883 304L906 387L861 387ZM883 348L912 431L855 431ZM883 392L918 475L849 475ZM880 436h6v26h-6ZM906 219L915 301L897 301ZM906 263L919 345L893 345ZM906 306L924 388L888 388ZM906 349L929 431L883 431ZM906 393L933 474L879 474ZM903 436h6v26h-6ZM929 250L937 321L920 321ZM929 288L941 359L916 359ZM929 325L945 397L912 397ZM929 363L950 435L908 435ZM929 401L954 473L903 473ZM926 439h6v23h-6ZM970 130L978 242L962 242ZM970 190L983 302L958 302ZM970 249L987 361L953 361ZM970 308L991 420L949 420ZM970 368L996 480L945 480ZM967 427h6v35h-6ZM987 132L996 243L977 243ZM987 191L1002 302L972 302ZM987 250L1007 362L967 362ZM987 309L1012 421L962 421ZM987 368L1017 480L957 480ZM984 427h6v35h-6ZM1025 229L1035 308L1015 308ZM1025 271L1040 349L1010 349ZM1025 312L1045 391L1005 391ZM1025 354L1050 432L1000 432ZM1025 395L1056 474L994 474ZM1022 437h6v25h-6ZM1064 201L1074 289L1055 289ZM1064 247L1079 336L1050 336ZM1064 294L1083 382L1046 382ZM1064 341L1088 429L1041 429ZM1064 387L1093 476L1036 476ZM1061 434h6v28h-6ZM1079 141L1086 249L1071 249ZM1079 198L1090 307L1067 307ZM1079 256L1094 364L1063 364ZM1079 313L1098 422L1059 422ZM1079 371L1103 479L1055 479ZM1076 428h6v34h-6ZM1118 151L1126 256L1110 256ZM1118 207L1131 312L1106 312ZM1118 262L1135 367L1102 367ZM1118 318L1139 423L1097 423ZM1118 373L1144 479L1093 479ZM1115 429h6v33h-6ZM1154 137L1164 247L1144 247ZM1154 195L1169 305L1139 305ZM1154 253L1174 363L1133 363ZM1154 311L1180 421L1128 421ZM1154 369L1185 479L1123 479ZM1151 428h6v34h-6ZM1186 246L1195 319L1176 319ZM1186 285L1200 357L1172 357ZM1186 323L1205 396L1167 396ZM1186 362L1210 434L1162 434ZM1186 400L1214 473L1157 473ZM1183 439h6v23h-6Z" fill="#1a0a0d" opacity=".85"></path><path d="M-20 72L-10 204L-30 204ZM-20 142L-4 274L-36 274ZM-20 212L1 344L-41 344ZM-20 281L7 413L-47 413ZM-20 351L12 483L-52 483ZM-23 421h6v41h-6ZM29 50L42 189L17 189ZM29 124L49 263L10 263ZM29 198L55 337L3 337ZM29 271L62 411L-3 411ZM29 345L69 485L-10 485ZM26 419h6v43h-6ZM85 127L96 240L74 240ZM85 187L102 300L68 300ZM85 247L108 360L62 360ZM85 307L114 420L56 420ZM85 367L120 480L50 480ZM82 427h6v35h-6ZM119 123L129 238L108 238ZM119 184L134 298L103 298ZM119 244L140 359L97 359ZM119 305L145 420L92 420ZM119 366L151 480L86 480ZM116 426h6v36h-6ZM150 169L161 268L139 268ZM150 222L166 321L134 321ZM150 274L172 373L128 373ZM150 326L178 425L122 425ZM150 379L183 477L117 477ZM147 431h6v31h-6ZM207 56L219 193L195 193ZM207 128L225 266L189 266ZM207 201L231 339L183 339ZM207 274L238 411L177 411ZM207 347L244 484L171 484ZM204 420h6v42h-6ZM234 143L243 251L224 251ZM234 200L248 308L219 308ZM234 257L253 365L214 365ZM234 314L258 422L209 422ZM234 371L263 479L205 479ZM231 428h6v34h-6ZM268 81L281 210L255 210ZM268 149L288 278L249 278ZM268 217L294 346L242 346ZM268 285L301 414L235 414ZM268 354L308 483L229 483ZM265 422h6v40h-6ZM311 80L324 209L299 209ZM311 148L330 278L293 278ZM311 217L337 346L286 346ZM311 285L343 414L280 414ZM311 354L350 483L273 483ZM308 422h6v40h-6ZM362 97L374 220L349 220ZM362 162L380 286L343 286ZM362 228L387 351L336 351ZM362 293L393 416L330 416ZM362 358L400 482L323 482ZM359 424h6v38h-6ZM393 91L403 217L382 217ZM393 158L408 283L377 283ZM393 224L414 349L372 349ZM393 290L419 416L366 416ZM393 357L425 482L361 482ZM390 423h6v39h-6ZM437 82L449 211L425 211ZM437 150L455 279L419 279ZM437 218L462 347L412 347ZM437 286L468 415L406 415ZM437 354L474 483L400 483ZM434 422h6v40h-6ZM472 58L484 194L460 194ZM472 130L490 267L454 267ZM472 202L496 339L448 339ZM472 275L503 412L442 412ZM472 347L509 484L435 484ZM469 420h6v42h-6ZM521 188L532 281L510 281ZM521 237L538 330L504 330ZM521 286L544 379L498 379ZM521 335L550 427L492 427ZM521 384L556 476L486 476ZM518 433h6v29h-6ZM552 96L563 220L541 220ZM552 161L569 285L535 285ZM552 227L575 351L530 351ZM552 293L581 416L524 416ZM552 358L587 482L518 482ZM549 424h6v38h-6ZM609 99L621 222L597 222ZM609 164L628 287L590 287ZM609 229L635 352L583 352ZM609 294L641 417L577 417ZM609 359L648 482L570 482ZM606 424h6v38h-6ZM636 100L649 222L624 222ZM636 165L655 287L618 287ZM636 229L661 352L611 352ZM636 294L668 417L605 417ZM636 359L674 482L598 482ZM633 424h6v38h-6ZM691 141L703 249L678 249ZM691 198L710 307L671 307ZM691 256L717 364L665 364ZM691 313L723 422L658 422ZM691 371L730 479L651 479ZM688 428h6v34h-6ZM733 94L746 218L719 218ZM733 160L753 284L712 284ZM733 226L760 350L705 350ZM733 291L767 416L698 416ZM733 357L774 482L692 482ZM730 423h6v39h-6ZM776 117L787 234L764 234ZM776 179L793 296L758 296ZM776 241L799 357L752 357ZM776 302L805 419L746 419ZM776 364L811 481L740 481ZM773 426h6v36h-6ZM794 73L807 204L781 204ZM794 143L814 274L774 274ZM794 212L821 344L767 344ZM794 282L827 414L760 414ZM794 352L834 483L753 483ZM791 421h6v41h-6ZM843 93L855 218L831 218ZM843 159L862 284L825 284ZM843 225L868 350L818 350ZM843 291L875 416L812 416ZM843 357L881 482L806 482ZM840 423h6v39h-6ZM891 166L904 266L879 266ZM891 219L910 319L872 319ZM891 272L917 372L866 372ZM891 325L923 425L859 425ZM891 378L930 478L853 478ZM888 431h6v31h-6ZM928 97L939 220L917 220ZM928 162L944 286L911 286ZM928 228L950 351L905 351ZM928 293L956 416L900 416ZM928 358L961 482L894 482ZM925 424h6v38h-6ZM970 82L981 210L958 210ZM970 150L988 278L952 278ZM970 218L994 346L945 346ZM970 286L1000 415L939 415ZM970 354L1006 483L933 483ZM967 422h6v40h-6ZM1013 186L1023 279L1003 279ZM1013 235L1028 329L998 329ZM1013 285L1033 378L993 378ZM1013 334L1038 427L988 427ZM1013 383L1043 476L983 476ZM1010 433h6v29h-6ZM1046 99L1056 222L1036 222ZM1046 164L1061 287L1030 287ZM1046 229L1066 352L1025 352ZM1046 294L1072 417L1020 417ZM1046 359L1077 482L1014 482ZM1043 424h6v38h-6ZM1093 102L1103 224L1084 224ZM1093 166L1107 288L1079 288ZM1093 231L1112 353L1074 353ZM1093 295L1117 417L1069 417ZM1093 360L1122 481L1064 481ZM1090 424h6v38h-6ZM1128 158L1137 261L1119 261ZM1128 213L1142 315L1114 315ZM1128 267L1147 369L1109 369ZM1128 321L1152 424L1104 424ZM1128 376L1157 478L1099 478ZM1125 430h6v32h-6ZM1159 146L1169 252L1149 252ZM1159 202L1174 309L1144 309ZM1159 259L1179 366L1139 366ZM1159 315L1184 422L1133 422ZM1159 372L1190 479L1128 479ZM1156 429h6v33h-6Z" fill="#0d1610"></path><rect y="452" width="1200" height="8" fill="var(--bg)"></rect><path d="M-22 135L-9 246L-35 246ZM-22 194L-2 304L-41 304ZM-22 252L4 363L-48 363ZM-22 311L11 421L-55 421ZM-22 369L18 479L-62 479ZM-25 428h6v34h-6ZM41 57L54 194L27 194ZM41 130L61 267L20 267ZM41 202L68 339L13 339ZM41 275L75 412L6 412ZM41 347L82 484L-1 484ZM38 420h6v42h-6ZM91 18L101 168L80 168ZM91 98L107 248L74 248ZM91 177L113 327L69 327ZM91 257L118 407L63 407ZM91 336L124 487L58 487ZM88 416h6v46h-6ZM153 102L165 224L140 224ZM153 167L172 288L134 288ZM153 231L178 353L127 353ZM153 296L185 417L120 417ZM153 360L192 481L114 481ZM150 424h6v38h-6ZM197 28L209 175L185 175ZM197 106L216 253L178 253ZM197 183L222 330L172 330ZM197 261L229 408L165 408ZM197 339L235 486L159 486ZM194 417h6v45h-6ZM249 57L260 194L238 194ZM249 130L266 267L232 267ZM249 202L272 339L227 339ZM249 275L278 412L221 412ZM249 347L284 484L215 484ZM246 420h6v42h-6ZM324 94L338 219L311 219ZM324 160L345 284L304 284ZM324 226L352 350L297 350ZM324 292L359 416L290 416ZM324 358L366 482L283 482ZM321 423h6v39h-6ZM396 29L409 176L383 176ZM396 107L415 253L377 253ZM396 184L422 331L370 331ZM396 262L428 408L364 408ZM396 339L435 486L357 486ZM393 417h6v45h-6ZM446 53L458 192L433 192ZM446 126L465 265L427 265ZM446 200L471 338L420 338ZM446 273L478 411L414 411ZM446 346L484 484L408 484ZM443 419h6v43h-6ZM475 60L488 196L462 196ZM475 132L495 268L455 268ZM475 204L502 340L448 340ZM475 276L509 412L441 412ZM475 348L516 484L434 484ZM472 420h6v42h-6ZM562 9L576 163L549 163ZM562 90L583 244L542 244ZM562 172L590 325L535 325ZM562 253L597 406L528 406ZM562 334L604 487L521 487ZM559 415h6v47h-6ZM594 19L605 169L584 169ZM594 99L610 249L578 249ZM594 178L616 328L572 328ZM594 257L622 407L567 407ZM594 337L627 486L561 486ZM591 416h6v46h-6ZM640 64L654 198L627 198ZM640 135L661 270L620 270ZM640 206L668 341L613 341ZM640 278L675 412L606 412ZM640 349L682 484L598 484ZM637 420h6v42h-6ZM697 55L712 193L682 193ZM697 128L719 266L675 266ZM697 201L727 339L667 339ZM697 274L735 411L659 411ZM697 347L743 484L651 484ZM694 420h6v42h-6ZM762 82L773 210L750 210ZM762 150L779 278L744 278ZM762 218L786 347L738 347ZM762 286L792 415L731 415ZM762 354L798 483L725 483ZM759 422h6v40h-6ZM814 9L826 162L801 162ZM814 90L833 243L795 243ZM814 171L839 325L788 325ZM814 252L846 406L782 406ZM814 334L852 487L775 487ZM811 415h6v47h-6ZM895 17L909 167L882 167ZM895 96L916 247L875 247ZM895 176L923 327L868 327ZM895 256L930 407L861 407ZM895 336L937 487L854 487ZM892 416h6v46h-6ZM923 8L936 161L911 161ZM923 89L943 243L904 243ZM923 170L950 324L897 324ZM923 252L957 406L890 406ZM923 333L963 487L883 487ZM920 415h6v47h-6ZM985 97L1000 220L970 220ZM985 162L1008 286L962 286ZM985 228L1016 351L954 351ZM985 293L1024 416L946 416ZM985 358L1032 482L938 482ZM982 424h6v38h-6ZM1043 101L1056 223L1031 223ZM1043 166L1063 288L1024 288ZM1043 230L1070 352L1017 352ZM1043 295L1076 417L1010 417ZM1043 360L1083 482L1004 482ZM1040 424h6v38h-6ZM1084 56L1097 193L1072 193ZM1084 129L1104 266L1065 266ZM1084 201L1110 339L1058 339ZM1084 274L1117 412L1052 412ZM1084 347L1124 484L1045 484ZM1081 420h6v42h-6ZM1147 34L1161 179L1132 179ZM1147 111L1169 256L1125 256ZM1147 188L1176 332L1117 332ZM1147 264L1184 409L1109 409ZM1147 341L1191 486L1102 486ZM1144 417h6v45h-6Z" fill="var(--bg)"></path></svg>
+</header>
+<main id="stage" class="stage">
+ <div class="book">
+  <button type="button" class="cover" id="cover"><span class="cv-t" id="cvt"></span><span class="cv-i" aria-hidden="true">🌕</span><span class="cv-s" id="cvs"></span></button>
+  <div class="sheet" id="sheet" hidden>
+   <div class="paper" id="paper" tabindex="-1" aria-live="polite"></div>
+   <div class="ctrl"><button type="button" id="pv"></button><span id="pn"></span><button type="button" id="nx"></button></div>
+   <button type="button" class="closeb" id="cl"></button>
+  </div>
+ </div>
+</main>
+<button type="button" class="onl" id="onl" aria-live="polite"><i aria-hidden="true"></i><span id="onln">Онлайн: 2</span></button>
+<div class="egg" id="egg" role="dialog" aria-modal="true" hidden=""></div>
+<footer data-k="foot">Легенда острова. Пишем вместе.</footer>
+<script>
+(function(){
+var T={
+ru:{
+title:`Легенда острова`,sub:`Книга, которую пишем вместе с друзьями`,
+lead:`Они приехали в село не так давно. Никто ещё не знал, чем всё это закончится.`,
+start:`Начать читать`,sec:`Раздел`,who:`Кто есть кто`,next:`Раздел 8 скоро`,
+nextp:`Продолжение пишут друзья. Напишите свой раздел, и он появится здесь.`,foot:`Легенда острова. Пишем вместе.`,
+names:{n:`Никита`,i:`Иван`,a:`Андрей`,l:`Аня`,g:`Бабушка Люся`,y:`Илья`},
+descs:{n:`Бесстрашный. Первым идёт туда, куда другие боятся.`,i:`По кличке Олень 🦌. Трусоват, зато у него есть своё прозвище.`,a:`Смешной и немного нарцисс.`,l:`Сестра братьев. Добрая и умная.`,g:`Бабушка. Ждёт внуков в селе.`,y:`Приёмный сын бабушки Люси. Живёт с ней в селе.`},
+secs:[
+{h:`Как всё началось`,t:[
+`Это было не так давно. В одно село приехали три брата.`,
+`Первого брата звали Никита, второго — Иван, а третьего — Андрей. С ними приехала и их сестра Аня. А в селе их ждали бабушка Люся и её приёмный сын Илья.`,
+`Все четверо были совсем разные. Аня была доброй и умной. Андрей был смешным и немного нарциссом. Никита был бесстрашным. А Иван был трусоват, и кличка у него была Олень 🦌.`,
+`А теперь приятного чтения.`,
+`n|Фух, наконец-то приехали.`,
+`i|Да, наконец-то... (сказал Иван своим писклявым голосом)`,
+`l|Чего ты так боишься этого села? Почему?`,
+`a|Он просто в интернете начитался, что озеро в этом селе проклято.`,
+`n|Ха-ха-ха-ха, Олень всему верит!`,
+`i|Я не Олень! Хватит меня так называть.`,
+`n|А то что? Ударишь меня?`,
+`l|А ну, угомонились! Пойдёмте уже к бабушке.`]},
+{h:`Дорога к бабушке`,t:[
+`a|Боже, в этом селе даже нормального компа нет.`,
+`n|Не бойся, Роблокс потянет.`,
+`a|Я один раз в него играл, и то сразу вышел.`,
+`l|Ну, мы пришли. Заходите уже.`,
+`g|Привет, мои любимые внуки!`,
+`g|Проходите за стол.`,
+`a|А где дед?`,
+`g|Он на рыбалку уехал, но оставил вам в подарок две лодки.`,
+`n|А нам можно будет поплавать на них?`,
+`g|Да, но пока нужно поесть. Пойдёмте за стол.`,
+`На столе было много вкусной еды.`,
+`i|Спасибо, бабушка, мы поели.`,
+`a|Спасибо.`,
+`n|Спасибо.`,
+`l|Спасибо.`,
+`Вдруг кто-то крикнул: «Пацаны!» — и влетел во двор. Это был Илья, мальчик, которого приютила бабушка.`,
+`y|Я вас так долго ждал!`,
+`n|Братан, я так ждал этой встречи!`,
+`Никита и Илья были лучшими друзьями.`,
+`a|Ну что, го на речку?`,
+`i|Может, не надо? Давайте лучше здесь посидим.`,
+`n|Да не парься, Олень, всё будет ок.`,
+`l|Реально, не бойся, всё будет хорошо.`,
+`i|Ну ладно, пойдёмте... (неуверенно сказал Иван)`]},
+{h:`Дорога к озеру через лес`,t:[
+`l|В лесу так прикольно!`,
+`y|Смотрите, рыжие зайцы!`,
+`a|Это же Дейзи из «Дума»!`,
+`n|Я думал, озеро дальше, а мы уже пришли.`,
+`i|Почему тут такой густой туман?`,
+`n|Бу! (подошёл сзади и напугал Ивана)`,
+`i|Аааа! (закричал Иван)`,
+`l|Вы же братья, должны дружить.`,
+`n|С этим лохом так и надо.`,
+`y|Всё, давайте уже плыть.`]},
+{h:`Похищение`,t:[
+`i|На воде так страшно.`,
+`a|Не бойся, мы с тобой рядом. Но запомни: спасать тебя я не буду.`,
+`l|Ха-ха, как смешно. (сказала с сарказмом Аня)`,
+`Чёрная тень проплыла под водой.`,
+`i|Что это там под водой? Не трогайте воду!`,
+`y|Да не бойся! Ты вот, смотри. (опустил руку в воду) Всё окей.`,
+`И тут чёрная лапа с когтями схватила Илью за руку.`,
+`n|Какого хера?!`,
+`Никита ударил по руке, но чёрная рука поцарапала его и утащила Илью.`,
+`n|Бл...`,
+`l|Никита!!!`,
+`a|Что нам делать?!`,
+`i|Нужно плыть на берег!!!`]},
+{h:`Остров и разделение команды`,t:[
+`l|Иван прав, нам нужно плыть на берег!`,
+`n|Нет, он украл моего друга.`,
+`l|Как хочешь, мы с Ваней будем плыть к берегу.`,
+`n|Ну и плывите. Андрей, ты со мной?`,
+`a|Конечно.`,
+`l|Наконец-то, вот и берег! Пошли к взрослым.`,
+`i|Нет. (неуверенно сказал Иван) Я такой трус... (посмотрел на свои дрожащие руки) Они бы нам помогли. Нам нужно плыть к ним!`,
+`l|Ладно, я с тобой. Ведь без меня вы не выживете.`,
+`Тем временем у Никиты и Андрея.`,
+`a|Куда будем плыть?`,
+`n|На остров.`,
+`a|Почему туда?`,
+`n|Я чувствую, он там.`,
+`a|Ладно, го.`,
+`Они приплыли на остров.`,
+`a|Фу, тут так воняет гнилью, как будто тут кто-то умер.`,
+`n|Ага.`,
+`Что-то пробежало за деревом с хрустом веток.`,
+`n|Что это за хрень там?`,
+`Из деревьев выбежало существо, похожее на оленя, только четырёх метров высотой, с облезлой кожей и красными глазами. Даже кости видно, а когти были сантиметров сорок.`,
+`n|Что за хрень? Что делать?`,
+`a|Бл... Бежать!`,
+`У парней так колотилось сердце, будто сейчас выскочит.`,
+`Они пытались убежать, но Андрей споткнулся о камень.`,
+`a|Ай!`,
+`Никита не убежал, а вернулся за ним, но их уже догнал олень.`,
+`n|Су...`,
+`Никита пытался отбиться палкой, но олень отбил её и поцарапал Никиту за ногу, да так, что ещё немного, и была бы видна кость.`,
+`n|Аааа! (через слёзы закричал Никита)`,
+`Тем временем у Ани и Ивана.`,
+`l|Они скорее всего на острове. Плывём туда!`,
+`Они услышали крик Никиты.`,
+`i|Плывём туда быстрее!!`]},
+{h:`Сова`,t:[
+`Тем временем у Никиты и Андрея.`,
+`a|Это конец. (сказал дрожащим голосом)`,
+`И тут из-за деревьев вылетает сова. Сама не больше метра, максимум, а крылья такие большие, больше чем туловище, и перья острые как ножи. Она бьёт оленя крыльями, царапает когтями, но тут олень бьёт её по крылу и скрывается в лесу.`,
+`Сова подходит к Никите, кладёт какие-то травы в рану и куском ткани перевязывает его. Он отключается.`,
+`И тут прибегают Иван с Аней.`,
+`i|Что это за монстр позади тебя?`,
+`a|Не бойся, оно защитило нас.`,
+`l|Где Никита?`,
+`a|Его ранили.`]},
+{h:`Загадки острова`,t:[
+`Начался дождь.`,
+`l|Что это за существо?`,
+`a|Пойдёмте в ту пещеру, там всё объясню.`,
+`l|Так что это?`,
+`a|Не знаю, но оно спасло нам жизнь.`,
+`i|От кого?`,
+`a|От такого большого страшного зверя, похожего на оленя.`,
+`i|Нам нужно плыть отсюда, Никита может умереть из-за раны.`,
+`a|Давайте подождём, пока пройдёт дождь.`,
+`l|Нельзя ждать, пойдёмте быстро!!!`,
+`a|Ладно.`,
+`l|Берите Никиту и быстро идём.`,
+`Они пришли к берегу.`,
+`l|Что? Где наши лодки!!??`,
+`Послышался лай собак.`,
+`a|Что это??`,
+`l|Собаки, что, не слышишь?`,
+`a|Я после оленя уже не радуюсь животным.`,
+`И тут их окружила стая собак, но не обычных: они были зелёного цвета, с облезлой кожей, у них были видны органы, и воняло тухлятиной.`,
+`a|Что делать? Они нас окружили!`,
+`И тут пролетает летучая мышь, сама довольно крупная, с криками, и собаки отвлекаются на неё.`,
+`l|Не теряем время, бежим!!`,
+`Сквозь туман и густой лес они всё же добираются до таинственного храма.`]}]},
+uk:{
+title:`Легенда острова`,sub:`Книга, яку пишемо разом з друзями`,
+lead:`Вони приїхали в село не так давно. Ніхто ще не знав, чим усе це закінчиться.`,
+start:`Почати читати`,sec:`Розділ`,who:`Хто є хто`,next:`Розділ 8 скоро`,
+nextp:`Продовження пишуть друзі. Напишіть свій розділ, і він з’явиться тут.`,foot:`Легенда острова. Пишемо разом.`,
+names:{n:`Микита`,i:`Іван`,a:`Андрій`,l:`Аня`,g:`Бабуся Люся`,y:`Ілля`},
+descs:{n:`Безстрашний. Першим іде туди, куди інші бояться.`,i:`На прізвисько Олень 🦌. Полохливий, зате має своє прізвисько.`,a:`Смішний і трохи нарцис.`,l:`Сестра братів. Добра й розумна.`,g:`Бабуся. Чекає на онуків у селі.`,y:`Прийомний син бабусі Люсі. Живе з нею в селі.`},
+secs:[
+{h:`Як усе почалося`,t:[
+`Це було не так давно. В одне село приїхали три брати.`,
+`Першого брата звали Микита, другого — Іван, а третього — Андрій. З ними приїхала й їхня сестра Аня. А в селі на них чекали бабуся Люся та її прийомний син Ілля.`,
+`Усі четверо були зовсім різні. Аня була доброю й розумною. Андрій був смішним і трохи нарцисом. Микита був безстрашним. А Іван був полохливий, і прізвисько в нього було Олень 🦌.`,
+`А тепер приємного читання.`,
+`n|Фух, нарешті приїхали.`,
+`i|Так, нарешті... (сказав Іван своїм писклявим голосом)`,
+`l|Чого ти так боїшся цього села? Чому?`,
+`a|Він просто в інтернеті начитався, що озеро в цьому селі прокляте.`,
+`n|Ха-ха-ха-ха, Олень усьому вірить!`,
+`i|Я не Олень! Годі мене так називати.`,
+`n|А то що? Вдариш мене?`,
+`l|А ну, вгамувалися! Ходімо вже до бабусі.`]},
+{h:`Дорога до бабусі`,t:[
+`a|Боже, у цьому селі навіть нормального компа нема.`,
+`n|Не бійся, Роблокс потягне.`,
+`a|Я один раз у нього грав, і то відразу вийшов.`,
+`l|Ну, ми прийшли. Заходьте вже.`,
+`g|Привіт, мої любі внуки!`,
+`g|Проходьте до столу.`,
+`a|А де дід?`,
+`g|Він поїхав на рибалку, але залишив вам у подарунок два човни.`,
+`n|А нам можна буде поплавати на них?`,
+`g|Так, але спочатку треба поїсти. Ходімо до столу.`,
+`На столі було багато смачної їжі.`,
+`i|Дякую, бабусю, ми поїли.`,
+`a|Дякую.`,
+`n|Дякую.`,
+`l|Дякую.`,
+`Раптом хтось крикнув: «Пацани!» — і влетів у двір. Це був Ілля, хлопчик, якого прихистила бабуся.`,
+`y|Я вас так довго чекав!`,
+`n|Братан, я так чекав цієї зустрічі!`,
+`Микита й Ілля були найкращими друзями.`,
+`a|Ну що, го на річку?`,
+`i|Може, не треба? Давайте краще тут посидимо.`,
+`n|Та не парся, Олень, усе буде ок.`,
+`l|Реально, не бійся, усе буде добре.`,
+`i|Ну гаразд, ходімо... (невпевнено сказав Іван)`]},
+{h:`Дорога до озера через ліс`,t:[
+`l|У лісі так прикольно!`,
+`y|Дивіться, руді зайці!`,
+`a|Це ж Дейзі з «Дума»!`,
+`n|Я думав, озеро далі, а ми вже прийшли.`,
+`i|Чому тут такий густий туман?`,
+`n|Бу! (підійшов ззаду й налякав Івана)`,
+`i|Аааа! (закричав Іван)`,
+`l|Ви ж брати, маєте дружити.`,
+`n|З цим лохом так і треба.`,
+`y|Усе, давайте вже пливти.`]},
+{h:`Викрадення`,t:[
+`i|На воді так страшно.`,
+`a|Не бійся, ми з тобою поруч. Але запам’ятай: рятувати тебе я не буду.`,
+`l|Ха-ха, як смішно. (сказала з сарказмом Аня)`,
+`Чорна тінь проплила під водою.`,
+`i|Що це там під водою? Не чіпайте воду!`,
+`y|Та не бійся! Ти ось дивись. (опустив руку у воду) Усе окей.`,
+`І тут чорна лапа з кігтями схопила Іллю за руку.`,
+`n|Якого біса?!`,
+`Микита вдарив по руці, але чорна рука подряпала його й потягла Іллю.`,
+`n|Блін...`,
+`l|Микита!!!`,
+`a|Що нам робити?!`,
+`i|Треба пливти на берег!!!`]},
+{h:`Острів і розділення команди`,t:[
+`l|Іван має рацію, нам треба пливти до берега!`,
+`n|Ні, він украв мого друга.`,
+`l|Як хочеш, ми з Ванею попливемо до берега.`,
+`n|Ну й пливіть. Андрію, ти зі мною?`,
+`a|Звісно.`,
+`l|Нарешті, ось і берег! Ходімо до дорослих.`,
+`i|Ні. (невпевнено сказав Іван) Я такий боягуз... (подивився на свої тремтячі руки) Вони б нам допомогли. Нам треба пливти до них!`,
+`l|Гаразд, я з тобою. Адже без мене ви не виживете.`,
+`Тим часом у Микити й Андрія.`,
+`a|Куди пливтимемо?`,
+`n|На острів.`,
+`a|Чому туди?`,
+`n|Я відчуваю, він там.`,
+`a|Гаразд, го.`,
+`Вони припливли на острів.`,
+`a|Фу, тут так тхне гниллям, ніби тут хтось помер.`,
+`n|Ага.`,
+`Щось пробігло за деревом із хрускотом гілок.`,
+`n|Що це за дичина там?`,
+`З-за дерев вибігла істота, схожа на оленя, тільки чотири метри заввишки, з облізлою шкірою та червоними очима. Навіть кістки видно, а кігті були сантиметрів сорок.`,
+`n|Що за дичина? Що робити?`,
+`a|Блін... Тікати!`,
+`У хлопців так калатало серце, ніби зараз вискочить.`,
+`Вони намагалися втекти, але Андрій спіткнувся об камінь.`,
+`a|Ай!`,
+`Микита не втік, а повернувся по нього, але їх уже наздогнав олень.`,
+`n|Зараза...`,
+`Микита намагався відбитися палицею, але олень відбив її й подряпав Микиту по нозі, та так, що ще трохи — і було б видно кістку.`,
+`n|Аааа! (крізь сльози закричав Микита)`,
+`Тим часом в Ані та Івана.`,
+`l|Вони, скоріше за все, на острові. Пливемо туди!`,
+`Вони почули крик Микити.`,
+`i|Пливемо туди швидше!!`]},
+{h:`Сова`,t:[
+`Тим часом у Микити й Андрія.`,
+`a|Це кінець. (сказав тремтячим голосом)`,
+`І тут з-за дерев вилітає сова. Сама не більша за метр, максимум, а крила такі великі, більші за тулуб, і пір’їни гострі як ножі. Вона б’є оленя крилами, дряпає кігтями, але тут олень б’є її по крилу й зникає в лісі.`,
+`Сова підходить до Микити, кладе якісь трави в рану й шматком тканини перев’язує його. Він втрачає свідомість.`,
+`І тут прибігають Іван з Анею.`,
+`i|Що це за монстр позаду тебе?`,
+`a|Не бійся, воно захистило нас.`,
+`l|Де Микита?`,
+`a|Його поранили.`]},
+{h:`Загадки острова`,t:[
+`Почався дощ.`,
+`l|Що це за істота?`,
+`a|Ходімо до тієї печери, там усе поясню.`,
+`l|Так що це?`,
+`a|Не знаю, але воно врятувало нам життя.`,
+`i|Від кого?`,
+`a|Від такого великого страшного звіра, схожого на оленя.`,
+`i|Нам треба пливти звідси, Микита може померти через рану.`,
+`a|Давайте зачекаємо, поки мине дощ.`,
+`l|Не можна чекати, ходімо швидко!!!`,
+`a|Гаразд.`,
+`l|Беріть Микиту й швидко йдемо.`,
+`Вони дійшли до берега.`,
+`l|Що? Де наші човни!!??`,
+`Почувся гавкіт собак.`,
+`a|Що це??`,
+`l|Собаки, що, не чуєш?`,
+`a|Після оленя я вже не радію тваринам.`,
+`І тут їх оточила зграя собак, але не звичайних: вони були зеленого кольору, з облізлою шкірою, у них було видно органи, і смерділо тухлятиною.`,
+`a|Що робити? Вони нас оточили!`,
+`І тут пролітає кажан, сам доволі великий, із криками, і собаки відволікаються на нього.`,
+`l|Не гаємо часу, біжимо!!`,
+`Крізь туман і густий ліс вони все ж дістаються до таємничого храму.`]}]},
+en:{
+title:`Legend of the Island`,sub:`A book we are writing together with friends`,
+lead:`They arrived in the village not so long ago. No one yet knew how it would all end.`,
+start:`Start reading`,sec:`Section`,who:`Who is who`,next:`Section 8 coming soon`,
+nextp:`The friends are writing the continuation. Write your own section and it will appear here.`,foot:`Legend of the Island. Written together.`,
+names:{n:`Nikita`,i:`Ivan`,a:`Andrey`,l:`Anya`,g:`Grandma Lyusya`,y:`Ilya`},
+descs:{n:`Fearless. Goes first where others are afraid to go.`,i:`Nicknamed the Deer 🦌. Timid, but he has a nickname of his own.`,a:`Funny and a bit of a narcissist.`,l:`The brothers’ sister. Kind and smart.`,g:`Grandma. Waits for her grandchildren in the village.`,y:`Grandma Lyusya’s adopted son. Lives with her in the village.`},
+secs:[
+{h:`How It All Began`,t:[
+`It was not so long ago. Three brothers came to a village.`,
+`The first brother was called Nikita, the second Ivan, and the third Andrey. Their sister Anya came with them. In the village, Grandma Lyusya and her adopted son Ilya were waiting for them.`,
+`All four were very different. Anya was kind and smart. Andrey was funny and a bit of a narcissist. Nikita was fearless. And Ivan was timid, and his nickname was the Deer 🦌.`,
+`And now, enjoy the read.`,
+`n|Phew, we’ve finally arrived.`,
+`i|Yeah, finally... (said Ivan in his squeaky voice)`,
+`l|Why are you so afraid of this village? What’s wrong?`,
+`a|He just read online that the lake in this village is cursed.`,
+`n|Ha-ha-ha-ha, the Deer believes everything!`,
+`i|I’m not a Deer! Stop calling me that.`,
+`n|Or what? You’ll hit me?`,
+`l|Okay, calm down, all of you! Let’s go to Grandma’s already.`]},
+{h:`The Road to Grandma’s`,t:[
+`a|Oh my God, this village doesn’t even have a decent computer.`,
+`n|Don’t worry, Roblox will run fine.`,
+`a|I played it once, and I quit right away.`,
+`l|Well, we’re here. Come on in.`,
+`g|Hello, my dear grandchildren!`,
+`g|Come to the table.`,
+`a|Where’s Grandpa?`,
+`g|He went fishing, but he left you two boats as a present.`,
+`n|Can we go sailing on them?`,
+`g|Yes, but first you need to eat. Come to the table.`,
+`There was a lot of tasty food on the table.`,
+`i|Thank you, Grandma, we’ve eaten.`,
+`a|Thanks.`,
+`n|Thanks.`,
+`l|Thanks.`,
+`Suddenly someone shouted, “Guys!” and ran into the yard. It was Ilya, a boy whom Grandma had taken in.`,
+`y|I’ve been waiting for you for so long!`,
+`n|Bro, I’ve been looking forward to this meeting so much!`,
+`Nikita and Ilya were best friends.`,
+`a|So, are we going to the river?`,
+`i|Maybe we shouldn’t? Let’s stay here instead.`,
+`n|Don’t worry, Deer, everything will be fine.`,
+`l|Seriously, don’t be afraid, everything will be fine.`,
+`i|Okay, let’s go... (said Ivan uncertainly)`]},
+{h:`The Road to the Lake Through the Forest`,t:[
+`l|The forest is so cool!`,
+`y|Look, ginger hares!`,
+`a|That’s Daisy from Doom!`,
+`n|I thought the lake was farther, but we’ve already arrived.`,
+`i|Why is the fog so thick here?`,
+`n|Boo! (came up from behind and scared Ivan)`,
+`i|Aaaah! (Ivan screamed)`,
+`l|You’re brothers, you should be friends.`,
+`n|This loser deserves it.`,
+`y|Okay, let’s sail already.`]},
+{h:`The Abduction`,t:[
+`i|It’s so scary on the water.`,
+`a|Don’t be afraid, we’re right beside you. But remember: I won’t save you.`,
+`l|Ha-ha, so funny. (said Anya sarcastically)`,
+`A black shadow swam past under the water.`,
+`i|What’s that under the water? Don’t touch the water!`,
+`y|Don’t be afraid! Look, watch. (put his hand in the water) See, it’s okay.`,
+`And then a black paw with claws grabbed Ilya by the hand.`,
+`n|What the hell?!`,
+`Nikita hit the arm, but the black hand scratched him and dragged Ilya away.`,
+`n|Damn...`,
+`l|Nikita!!!`,
+`a|What do we do?!`,
+`i|We need to head for the shore!!!`]},
+{h:`The Island and the Team Splits Up`,t:[
+`l|Ivan is right, we need to head for the shore!`,
+`n|No, it stole my friend.`,
+`l|Suit yourself, Ivan and I will head for the shore.`,
+`n|Fine, go. Andrey, are you with me?`,
+`a|Of course.`,
+`l|Finally, there’s the shore! Let’s go to the adults.`,
+`i|No. (said Ivan uncertainly) I’m such a coward... (looked at his trembling hands) They would have helped us. We need to go to them!`,
+`l|Fine, I’m with you. You won’t survive without me anyway.`,
+`Meanwhile, with Nikita and Andrey.`,
+`a|Where are we sailing?`,
+`n|To the island.`,
+`a|Why there?`,
+`n|I can feel he’s there.`,
+`a|Okay, let’s go.`,
+`They reached the island.`,
+`a|Ugh, it stinks of rot here, as if someone died.`,
+`n|Yeah.`,
+`Something ran behind a tree with a crack of branches.`,
+`n|What the heck is that?`,
+`A creature that looked like a deer came running out of the trees, but four meters tall, with mangy skin and red eyes. You could even see its bones, and its claws were about forty centimeters long.`,
+`n|What the heck is that thing? What do we do?`,
+`a|Damn... Run!`,
+`Their hearts pounded as if they would burst out.`,
+`They tried to run, but Andrey tripped over a stone.`,
+`a|Ow!`,
+`Nikita didn’t run away. He went back for him, but the deer had already caught up with them.`,
+`n|Crap...`,
+`Nikita tried to fight it off with a stick, but the deer knocked it away and scratched Nikita’s leg so badly that a little more and the bone would have been visible.`,
+`n|Aaaah! (Nikita screamed through his tears)`,
+`Meanwhile, with Anya and Ivan.`,
+`l|They’re most likely on the island. Let’s sail there!`,
+`They heard Nikita’s scream.`,
+`i|Sail there faster!!`]},
+{h:`The Owl`,t:[
+`Meanwhile, with Nikita and Andrey.`,
+`a|This is the end. (said in a trembling voice)`,
+`And then an owl flies out from behind the trees. It is no bigger than a meter at most, but its wings are huge, bigger than its body, and its feathers are sharp as knives. It strikes the deer with its wings and scratches it with its claws, but then the deer hits its wing and disappears into the forest.`,
+`The owl walks up to Nikita, puts some herbs on the wound and bandages him with a piece of cloth. He passes out.`,
+`And then Ivan and Anya come running.`,
+`i|What is that monster behind you?`,
+`a|Don’t be afraid, it protected us.`,
+`l|Where is Nikita?`,
+`a|He’s been wounded.`]},
+{h:`Mysteries of the Island`,t:[
+`It started to rain.`,
+`l|What is that creature?`,
+`a|Let’s go to that cave, I’ll explain everything there.`,
+`l|So what is it?`,
+`a|I don’t know, but it saved our lives.`,
+`i|From what?`,
+`a|From a big, scary beast that looked like a deer.`,
+`i|We need to sail away from here, Nikita could die from his wound.`,
+`a|Let’s wait until the rain stops.`,
+`l|We can’t wait, let’s go quickly!!!`,
+`a|Fine.`,
+`l|Take Nikita and let’s go, quickly.`,
+`They reached the shore.`,
+`l|What? Where are our boats!!??`,
+`The barking of dogs was heard.`,
+`a|What is that??`,
+`l|Dogs, can’t you hear?`,
+`a|After the deer, I’m not happy about animals anymore.`,
+`And then a pack of dogs surrounded them, but not ordinary ones: they were green, with peeling skin, their organs were visible, and they stank of rot.`,
+`a|What do we do? They’ve surrounded us!`,
+`And then a bat flies by, quite large itself, screeching, and the dogs get distracted by it.`,
+`l|Let’s not waste time, run!!`,
+`Through the fog and the dense forest, they still make it to the mysterious temple.`]}]}
+};
+var btns=document.querySelectorAll('.lang button');
+var U={
+ru:{open:'Открыть книгу',tap:'Нажмите, чтобы открыть',prev:'Назад',next:'Дальше',close:'Закрыть книгу',pg:'Страница',of:'из',onl:'Онлайн',onlx:'Нажмите, чтобы обновить',bm:'Закладка',egg:'Не надо было сюда лезть.',go:'Продолжить читать'},
+uk:{open:'Відкрити книгу',tap:'Натисніть, щоб відкрити',prev:'Назад',next:'Далі',close:'Закрити книгу',pg:'Сторінка',of:'з',onl:'Онлайн',onlx:'Натисніть, щоб оновити',bm:'Закладка',egg:'Не треба було сюди лізти.',go:'Продовжити читати'},
+en:{open:'Open the book',tap:'Tap to open',prev:'Back',next:'Next',close:'Close the book',pg:'Page',of:'of',onl:'Online',onlx:'Tap to refresh',bm:'Bookmark',egg:'You shouldn’t have come here.',go:'Keep reading'}
+};
+var $=function(i){return document.getElementById(i);};
+var lang='ru',pages=[],cur=-1,tries=0,still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function isHead(x){return x.indexOf('class="chapter-head"')>-1;}
+function items(t){
+  var L=[];
+  t.secs.forEach(function(s,i){
+    L.push('<div class="chapter-head"><small>'+t.sec+' '+(i+1)+'</small><h2>'+s.h+'</h2></div>');
+    s.t.forEach(function(x,j){
+      if(x.charAt(1)==='|'){var c=x.charAt(0);L.push('<p class="line sp-'+c+'"><b>'+t.names[c]+':</b> '+x.slice(2)+'</p>');}
+      else{L.push('<p'+(i===0&&j===0?' class="first"':'')+'>'+x+'</p>');}
+    });
+  });
+  return L;
+}
+function paginate(L){
+  var W=document.querySelector('.book').offsetWidth||360;
+  var vh=Math.min(window.innerHeight||800,(window.screen&&screen.height)||800);
+  var budget=Math.max(430,Math.min(vh*0.62,620));
+  var m=document.createElement('div');
+  m.className='paper';m.setAttribute('aria-hidden','true');
+  m.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;min-height:0;width:'+W+'px';
+  document.body.appendChild(m);
+  var P=[],page=[];
+  function html(a){return '<div class="story">'+a.join('')+'</div>';}
+  L.forEach(function(x){
+    page.push(x);
+    m.innerHTML=html(page);
+    if(m.offsetHeight>budget&&page.length>1){
+      page.pop();
+      var carry=[];
+      if(page.length>1&&isHead(page[page.length-1]))carry.push(page.pop());
+      P.push(html(page));
+      page=carry.concat([x]);
+    }
+  });
+  if(page.length)P.push(html(page));
+  document.body.removeChild(m);
+  return P;
+}
+function build(t){
+  var o=['n','i','a','l','g','y'];
+  var P=paginate(items(t));
+  P[P.length-1]+='<div class="next"><h3>'+t.next+'</h3><p>'+t.nextp+'</p></div>';
+  var h='<h3>'+t.who+'</h3><ul class="cast">';
+  o.forEach(function(c){h+='<li><div class="mark m-'+c+'" aria-hidden="true">'+t.names[c].split(' ').pop().charAt(0)+'</div><b>'+t.names[c]+'</b><span>'+t.descs[c]+'</span></li>';});
+  P.unshift(h+'</ul>');
+  if(P[3])P[3]='<button type="button" class="bm" aria-label="'+U[lang].bm+'"></button>'+P[3];
+  if(P[8]){
+    var DZ='<svg viewBox="0 0 100 120" aria-hidden="true"><defs><radialGradient id="df" cx=".4" cy=".3" r=".85"><stop offset="0" stop-color="#f6a95e"/><stop offset=".55" stop-color="#e27a2e"/><stop offset="1" stop-color="#a94d17"/></radialGradient><radialGradient id="dl" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#fbe6c8"/><stop offset="1" stop-color="#e8b987"/></radialGradient><linearGradient id="de" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0903f"/><stop offset="1" stop-color="#b95a1e"/></linearGradient><linearGradient id="di" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7c9b0"/><stop offset="1" stop-color="#e59a86"/></linearGradient><radialGradient id="dsh" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".45"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><ellipse cx="50" cy="114" rx="34" ry="5" fill="url(#dsh)"/><ellipse cx="27" cy="97" rx="19" ry="19" fill="url(#df)"/><ellipse cx="73" cy="97" rx="19" ry="19" fill="url(#df)"/><ellipse cx="50" cy="90" rx="26" ry="26" fill="url(#df)"/><ellipse cx="50" cy="98" rx="14" ry="17" fill="url(#dl)"/><ellipse cx="41" cy="113" rx="8" ry="4.5" fill="url(#dl)" stroke="#b9743c" stroke-width=".6"/><ellipse cx="59" cy="113" rx="8" ry="4.5" fill="url(#dl)" stroke="#b9743c" stroke-width=".6"/><path d="M38 110v3M41 110v3.5M44 110v3M56 110v3M59 110v3.5M62 110v3" stroke="#b9743c" stroke-width=".5"/><path d="M36 20Q26 2 32 -2Q44 8 46 34Z" fill="url(#de)" transform="translate(0 6)"/><path d="M64 20Q74 2 68 -2Q56 8 54 34Z" fill="url(#de)" transform="translate(0 6)"/><path d="M37 22Q31 10 34 5Q42 14 44 32Z" fill="url(#di)" transform="translate(0 6)"/><path d="M63 22Q69 10 66 5Q58 14 56 32Z" fill="url(#di)" transform="translate(0 6)"/><ellipse cx="50" cy="58" rx="26" ry="22" fill="url(#df)"/><path d="M26 62Q22 68 28 70Q27 66 30 64ZM74 62Q78 68 72 70Q73 66 70 64Z" fill="#e27a2e"/><path d="M26 54Q22 56 24 60M74 54Q78 56 76 60" stroke="#a94d17" stroke-width=".8" fill="none"/><ellipse cx="50" cy="68" rx="14" ry="10" fill="url(#dl)"/><ellipse cx="38" cy="54" rx="6" ry="3.2" fill="#f7c58d" opacity=".7"/><ellipse cx="62" cy="54" rx="6" ry="3.2" fill="#f7c58d" opacity=".7"/><ellipse cx="38" cy="56" rx="4.4" ry="5" fill="#25130a"/><ellipse cx="62" cy="56" rx="4.4" ry="5" fill="#25130a"/><ellipse cx="38" cy="56" rx="2.2" ry="2.6" fill="#6b3a1a"/><ellipse cx="62" cy="56" rx="2.2" ry="2.6" fill="#6b3a1a"/><circle cx="36.6" cy="54.2" r="1.4" fill="#fff"/><circle cx="60.6" cy="54.2" r="1.4" fill="#fff"/><path d="M32 52Q38 49 44 52M56 52Q62 49 68 52" stroke="#7a3a12" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M46 64Q50 62 54 64Q53 68 50 69Q47 68 46 64Z" fill="#d9788a" stroke="#a9505f" stroke-width=".6"/><path d="M50 69V73M50 73Q46 77 42 75M50 73Q54 77 58 75" stroke="#7a4a3a" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M36 68L14 63M36 71L12 71M36 74L14 79M64 68L86 63M64 71L88 71M64 74L86 79" stroke="#fff3df" stroke-width=".7" opacity=".85" stroke-linecap="round"/><g stroke="#f7a95e" stroke-width=".7" opacity=".7" stroke-linecap="round"><path d="M40 84L38 89M46 86L45 92M54 86L55 92M60 84L62 89M22 92L20 98M30 100L28 106M78 92L80 98M70 100L72 106"/></g><g stroke="#b9561c" stroke-width=".7" opacity=".6" stroke-linecap="round"><path d="M34 44L36 48M44 40L45 44M56 40L55 44M66 44L64 48M30 90L32 95M70 90L68 95"/></g></svg>';
+    var PL={ru:'Лепесток',uk:'Пелюстка',en:'Petal'}[lang];
+    P[8]+='<div class="dz-space"></div><button type="button" class="petal" aria-label="'+PL+'"></button><div class="daisy" data-s="0" aria-live="polite"><span class="say"></span>'+DZ+'</div>';
+  }
+  return P;
+}
+function show(i,anim){
+  var u=U[lang],p=$('paper');
+  function put(){
+    cur=i;p.innerHTML=pages[i];
+    $('pn').textContent=u.pg+' '+(i+1)+' '+u.of+' '+pages.length;
+    $('nx').disabled=i>=pages.length-1;
+    p.classList.remove('turn');
+  }
+  if(anim&&!still){p.classList.add('turn');setTimeout(put,250);}else{put();}
+}
+function openBook(){
+  if(cur>=0)return;
+  var c=$('cover');c.classList.add('opening');
+  setTimeout(function(){c.hidden=true;c.classList.remove('opening');$('sheet').hidden=false;show(0,false);$('nx').focus();},still?0:600);
+}
+function GHOST(shot){
+  return '<svg viewBox="0 0 200 250" aria-hidden="true"><path d="M22 250L34 160Q44 132 100 130Q156 132 166 160L178 250Z" fill="#141414"/><path d="M62 142L72 250M138 142L128 250" stroke="#262626" stroke-width="3"/><rect x="86" y="108" width="28" height="26" fill="#0b0b0b"/><circle cx="100" cy="76" r="36" fill="#0b0b0b"/><path d="M64 66Q64 34 100 34Q136 34 136 66Q118 56 100 56Q82 56 64 66Z" fill="#1f1f1f"/><rect x="72" y="62" width="56" height="13" rx="6" fill="#c99a76"/><circle cx="86" cy="68" r="3.6" fill="#0a0a0a"/><circle cx="114" cy="68" r="3.6" fill="#0a0a0a"/><path d="M78 60L94 63M122 60L106 63" stroke="#0b0b0b" stroke-width="3"/><path d="M66 80Q100 72 134 80L130 106Q100 124 70 106Z" fill="#e9e6dc"/><path d="M95 94L100 85L105 94Z" fill="#111"/><path d="M82 104v10M91 106v12M100 107v13M109 106v12M118 104v10" stroke="#222" stroke-width="2.4"/><path d="M40 176Q58 206 100 200" stroke="#161616" stroke-width="22" fill="none" stroke-linecap="round"/><path d="M160 176Q142 206 128 204" stroke="#161616" stroke-width="22" fill="none" stroke-linecap="round"/><path d="M120 190L146 184L156 224L130 230Z" fill="#1d1d1d" stroke="#555" stroke-width="1.5"/><path d="M104 190Q108 204 120 200" stroke="#333" stroke-width="3" fill="none"/><path d="M116 168L146 162L146 184L116 190Z" fill="#2b2b2b" stroke="#777" stroke-width="1.5"/><rect x="82" y="168" width="34" height="22" rx="3" fill="#3a3a3a" stroke="#999" stroke-width="2"/><rect x="96" y="162" width="6" height="7" fill="#555"/><circle cx="99" cy="179" r="7" fill="#000" stroke="#777" stroke-width="2"/><circle cx="136" cy="214" r="12" fill="#262626" stroke="#555" stroke-width="1.2"/><circle cx="108" cy="204" r="10" fill="#262626" stroke="#555" stroke-width="1.2"/>'+(shot?'<g transform="translate(-1 14)"><g class="mf"><polygon points="100,112 110,142 138,128 118,156 152,168 118,174 134,206 106,184 100,216 94,184 66,206 82,174 48,168 82,156 62,128 90,142" fill="#ffb02e"/><polygon points="100,134 106,154 124,148 110,164 126,178 106,174 100,194 94,174 74,178 90,164 76,148 94,154" fill="#fff6c8"/></g></g>':'')+'</svg>';
+}
+function openEgg(){
+  var e=$('egg'),u=U[lang];tries++;
+  e.classList.remove('flash','shot','aim');void e.offsetWidth;
+  if(tries===1){
+    e.innerHTML=GHOST(false)+'<p class="redblink">'+u.egg+'</p>';
+    e.classList.add('aim');
+    e.tabIndex=0;
+  }else{
+    e.innerHTML=GHOST(true)+'<button type="button" id="eggb">'+u.go+'</button>';
+    e.classList.add('flash','shot');
+  }
+  e.setAttribute('aria-label',u.bm);e.hidden=false;
+  if(tries===1){e.focus();}else{$('eggb').focus();}
+}
+function closeEgg(){$('egg').hidden=true;$('egg').classList.remove('flash','aim','shot');var b=$('paper').querySelector('.bm');(b||$('paper')).focus();}
+$('egg').addEventListener('click',function(e){if(e.target.id==='eggb'||this.classList.contains('aim'))closeEgg();});
+$('paper').addEventListener('click',function(e){if(e.target.closest('.bm'))openEgg();});
+function closeBook(){cur=-1;$('sheet').hidden=true;$('cover').hidden=false;$('cover').focus();}
+function setLang(l){
+  lang=l;var t=T[l],u=U[l];
+  document.documentElement.lang=l;document.title=t.title;
+  document.querySelectorAll('[data-k]').forEach(function(e){e.textContent=t[e.getAttribute('data-k')];});
+  pages=build(t);
+  $('cvt').textContent=t.title;$('cvs').textContent=u.tap;$('cover').setAttribute('aria-label',u.open+': '+t.title);
+  $('pv').textContent='‹ '+u.prev;$('nx').textContent=u.next+' ›';$('cl').textContent=u.close;
+  btns.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-lang')===l?'true':'false');});
+  try{localStorage.setItem('lang',l);}catch(err){}
+  if(cur>=0)show(Math.min(cur,pages.length-1),false);
+  drawOnline();
+}
+var online=null,room=null;
+function drawOnline(){
+  var u=U[lang];
+  $('onln').textContent=u.onl+(online===null?'':': '+online);
+  $('onl').classList.toggle('off',online===null);
+}
+function countPeers(ps){var c=0;ps.forEach(function(p){if(p.kind==='viewer')c++;});return c;}
+$('onl').addEventListener('click',function(){if(room){online=countPeers(room.peers());}drawOnline();});
+try{
+  if(window.claude&&claude.use){
+    claude.use('room').then(function(r){
+      if(!r)return;
+      room=r;
+      r.onPeers(function(ch){online=countPeers(ch.peers);drawOnline();},function(){online=null;drawOnline();});
+    }).catch(function(){});
+  }
+}catch(err){}
+btns.forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-lang'));});});
+$('cover').addEventListener('click',openBook);
+$('cl').addEventListener('click',closeBook);
+$('pv').addEventListener('click',function(){if(cur>0)show(cur-1,true);else closeBook();});
+$('nx').addEventListener('click',function(){if(cur<pages.length-1)show(cur+1,true);});
+document.querySelector('.hero .btn').addEventListener('click',function(e){e.preventDefault();$('stage').scrollIntoView({behavior:still?'auto':'smooth'});openBook();});
+document.addEventListener('keydown',function(e){
+  if(!$('egg').hidden){if(e.key==='Escape'||((e.key==='Enter'||e.key===' ')&&$('egg').classList.contains('aim')))closeEgg();return;}
+  if(cur<0||e.target.closest&&e.target.closest('.lang'))return;
+  if(e.key==='ArrowRight'&&cur<pages.length-1)show(cur+1,true);
+  if(e.key==='ArrowLeft'&&cur>0)show(cur-1,true);
+});
+var s='ru';try{s=localStorage.getItem('lang')||'ru';}catch(err){}
+setLang(T[s]?s:'ru');
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){var c=cur;pages=build(T[lang]);if(c>=0)show(Math.min(c,pages.length-1),false);});}
+})();
+</script>
+
+
+<div class="bio" id="bio" role="dialog" aria-modal="true" hidden></div>
+<script>
+(function(){
+var B={
+ru:{btn:`Биография персонажей`,title:`Биография персонажей`,close:`Закрыть`,L:{hair:`Волосы`,eyes:`Глаза`,h:`Рост`,x:`Особенности`},p:[
+{c:'n',n:`Никита`,t:`Бесстрашный`,hair:`Тёмные`,eyes:`Голубые`,h:`Низкий`},
+{c:'i',n:`Иван`,t:`Трусоват, кличка Олень 🦌`,hair:`Белые`,eyes:`Голубые`,h:`Средний`},
+{c:'a',n:`Андрей`,t:`Смешной и немного нарцисс`,hair:`Светлые, оранжевые`,eyes:`Зелёные`,h:`Средний`},
+{c:'l',n:`Аня`,t:`Добрая и умная`,hair:`Белые, до талии`,eyes:`Голубые`,h:`Средний`,x:`Веснушки`}]},
+uk:{btn:`Біографія персонажів`,title:`Біографія персонажів`,close:`Закрити`,L:{hair:`Волосся`,eyes:`Очі`,h:`Зріст`,x:`Особливості`},p:[
+{c:'n',n:`Микита`,t:`Безстрашний`,hair:`Темне`,eyes:`Блакитні`,h:`Низький`},
+{c:'i',n:`Іван`,t:`Полохливий, прізвисько Олень 🦌`,hair:`Біле`,eyes:`Блакитні`,h:`Середній`},
+{c:'a',n:`Андрій`,t:`Смішний і трохи нарцис`,hair:`Світле, помаранчеве`,eyes:`Зелені`,h:`Середній`},
+{c:'l',n:`Аня`,t:`Добра й розумна`,hair:`Біле, до пояса`,eyes:`Блакитні`,h:`Середній`,x:`Веснянки`}]},
+en:{btn:`Character biographies`,title:`Character biographies`,close:`Close`,L:{hair:`Hair`,eyes:`Eyes`,h:`Height`,x:`Features`},p:[
+{c:'n',n:`Nikita`,t:`Fearless`,hair:`Dark`,eyes:`Blue`,h:`Short`},
+{c:'i',n:`Ivan`,t:`Timid, nicknamed the Deer 🦌`,hair:`White`,eyes:`Blue`,h:`Average`},
+{c:'a',n:`Andrey`,t:`Funny and a bit of a narcissist`,hair:`Light, orange`,eyes:`Green`,h:`Average`},
+{c:'l',n:`Anya`,t:`Kind and smart`,hair:`White, waist-length`,eyes:`Blue`,h:`Average`,x:`Freckles`}]}
+};
+var bio=document.getElementById('bio'),btn=document.getElementById('bioBtn'),last=null;
+function cur(){var l=document.documentElement.lang;return B[l]?l:'ru';}
+function draw(){
+  var d=B[cur()],h='<div class="bio-in"><h2 id="bioT">'+d.title+'</h2>';
+  d.p.forEach(function(p){
+    h+='<section class="bio-c"><div class="bio-h"><div class="mark m-'+p.c+'" aria-hidden="true">'+p.n.charAt(0)+'</div><div><b>'+p.n+'</b><div class="bio-t">'+p.t+'</div></div></div><dl><dt>'+d.L.hair+'</dt><dd>'+p.hair+'</dd><dt>'+d.L.eyes+'</dt><dd>'+p.eyes+'</dd><dt>'+d.L.h+'</dt><dd>'+p.h+'</dd>'+(p.x?'<dt>'+d.L.x+'</dt><dd>'+p.x+'</dd>':'')+'</dl></section>';
+  });
+  h+='<button type="button" class="bio-x" id="bioX">'+d.close+'</button></div>';
+  bio.innerHTML=h;bio.setAttribute('aria-labelledby','bioT');btn.textContent=d.btn;
+}
+function openBio(){draw();last=document.activeElement;bio.hidden=false;document.getElementById('bioX').focus();}
+function closeBio(){bio.hidden=true;if(last)last.focus();}
+btn.addEventListener('click',openBio);
+bio.addEventListener('click',function(e){if(e.target===bio||e.target.id==='bioX')closeBio();});
+document.addEventListener('keydown',function(e){
+  if(bio.hidden)return;
+  if(e.key==='Escape')closeBio();
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight')e.stopPropagation();
+},true);
+new MutationObserver(function(){var open=!bio.hidden;draw();if(open)document.getElementById('bioX').focus();}).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+draw();
+})();
+</script>
+<script>
+(function(){
+var S={ru:['Дейзи!','Я здесь! Я скучаю по своему хозяину'],uk:['Дейзі!','Я тут! Я сумую за своїм господарем'],en:['Daisy!','I’m here! I miss my owner']};
+document.addEventListener('click',function(e){
+  var pt=e.target.closest&&e.target.closest('.petal');
+  if(!pt)return;
+  var d=document.getElementById('paper').querySelector('.daisy');
+  if(!d)return;
+  var st=+d.getAttribute('data-s')||0,say=d.querySelector('.say'),L=S[document.documentElement.lang]||S.ru;
+  if(st===0){say.textContent=L[0];d.classList.remove('hop');d.classList.add('in');d.setAttribute('data-s','1');}
+  else if(st===1){say.textContent=L[1];d.classList.remove('hop');void d.offsetWidth;d.classList.add('hop');d.setAttribute('data-s','2');}
+  else{d.classList.remove('in','hop');d.setAttribute('data-s','0');}
+});
+})();
+</script>
+<script>
+(function(){
+var T={ru:['Звезда','Варя была здесь'],uk:['Зірка','Варя була тут'],en:['Star','Varya was here']};
+var b=document.getElementById('vd'),t=document.getElementById('vdt');
+function paint(){var l=T[document.documentElement.lang]||T.ru;b.setAttribute('aria-label',l[0]);t.textContent=l[1];}
+b.addEventListener('click',function(){var on=t.classList.toggle('on');b.setAttribute('aria-expanded',on?'true':'false');t.setAttribute('aria-hidden',on?'false':'true');});
+new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+paint();
+})();
+</script>
+<script>
+(function(){
+var T={ru:['Точка','Маря была здесь'],uk:['Крапка','Маря була тут'],en:['Dot','Marya was here']};
+var b=document.getElementById('vd2'),t=document.getElementById('vd2t');
+function paint(){var l=T[document.documentElement.lang]||T.ru;b.setAttribute('aria-label',l[0]);t.textContent=l[1];}
+b.addEventListener('click',function(){var on=t.classList.toggle('on');b.setAttribute('aria-expanded',on?'true':'false');t.setAttribute('aria-hidden',on?'false':'true');});
+new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+paint();
+})();
+</script>
+<div class="bio" id="mon" role="dialog" aria-modal="true" hidden></div>
+<script>
+(function(){
+var M={
+ru:{btn:`Биография монстров`,title:`Биография монстров`,close:`Закрыть`,L:{a:`Животное`,h:`Рост`,e:`Глаза`,x:`Особенность`},p:[
+{i:'🦌',c:'#7a2a24',n:`Олень`,a:`Олень`,h:`4 метра`,e:`Красные`,x:`Облезлая кожа, видно кости`},
+{i:'🦉',c:'#5a4a38',n:`Сова`,a:`Сова`,h:`1 метр`,e:`Чёрные`,x:`Большие крылья, перья как ножи`}]},
+uk:{btn:`Біографія монстрів`,title:`Біографія монстрів`,close:`Закрити`,L:{a:`Тварина`,h:`Зріст`,e:`Очі`,x:`Особливість`},p:[
+{i:'🦌',c:'#7a2a24',n:`Олень`,a:`Олень`,h:`4 метри`,e:`Червоні`,x:`Облізла шкіра, видно кістки`},
+{i:'🦉',c:'#5a4a38',n:`Сова`,a:`Сова`,h:`1 метр`,e:`Чорні`,x:`Великі крила, пір’їни як ножі`}]},
+en:{btn:`Monster biographies`,title:`Monster biographies`,close:`Close`,L:{a:`Animal`,h:`Height`,e:`Eyes`,x:`Features`},p:[
+{i:'🦌',c:'#7a2a24',n:`Deer`,a:`Deer`,h:`4 meters`,e:`Red`,x:`Mangy skin, bones visible`},
+{i:'🦉',c:'#5a4a38',n:`Owl`,a:`Owl`,h:`1 meter`,e:`Black`,x:`Huge wings, feathers like knives`}]}
+};
+var box=document.getElementById('mon'),btn=document.getElementById('monBtn'),last=null;
+function cur(){var l=document.documentElement.lang;return M[l]?l:'ru';}
+function draw(){
+  var d=M[cur()],h='<div class="bio-in"><h2 id="monT">'+d.title+'</h2>';
+  d.p.forEach(function(p){
+    h+='<section class="bio-c"><div class="bio-h"><div class="mark" style="background:'+p.c+'" aria-hidden="true">'+p.i+'</div><div><b>'+p.n+'</b></div></div><dl><dt>'+d.L.a+'</dt><dd>'+p.a+'</dd><dt>'+d.L.h+'</dt><dd>'+p.h+'</dd><dt>'+d.L.e+'</dt><dd>'+p.e+'</dd><dt>'+d.L.x+'</dt><dd>'+p.x+'</dd></dl></section>';
+  });
+  h+='<button type="button" class="bio-x" id="monX">'+d.close+'</button></div>';
+  box.innerHTML=h;box.setAttribute('aria-labelledby','monT');btn.textContent=d.btn;
+}
+function openM(){draw();last=document.activeElement;box.hidden=false;document.getElementById('monX').focus();}
+function closeM(){box.hidden=true;if(last)last.focus();}
+btn.addEventListener('click',openM);
+box.addEventListener('click',function(e){if(e.target===box||e.target.id==='monX')closeM();});
+document.addEventListener('keydown',function(e){
+  if(box.hidden)return;
+  if(e.key==='Escape')closeM();
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight')e.stopPropagation();
+},true);
+new MutationObserver(function(){var open=!box.hidden;draw();if(open)document.getElementById('monX').focus();}).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+draw();
+})();
+</script>
+</body></html>
